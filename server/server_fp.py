@@ -24,6 +24,5 @@ class myHTTPRequestHandler(SimpleHTTPRequestHandler):
             self.wfile.write(b"<h1>Error 404: Not Found</h1>")
 
 httpd =  HTTPServer(("localhost", 8443), myHTTPRequestHandler) 
-httpd.socket = ssl.wrap_socket(httpd.socket, keyfile="key.pem", certfile="cert.pem", server_side=True)
 httpd.serve_forever()
 
