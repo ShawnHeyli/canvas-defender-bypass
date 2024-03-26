@@ -12,5 +12,16 @@
     <h1>CANVAS POISONNING</h1>
     <br>
     <p>This website will collect your fingerprints for educational purposes, but will not store or use them under any circumstances.    </p>
+    <canvas width="300" height="100">
+  Désolé, votre navigateur ne prend pas en charge &lt;canvas&gt;.
+</canvas>
+
+<script>
+var canvas = document.querySelector("canvas");
+var ctx = canvas.getContext("2d");
+ctx.fillStyle = "green";
+ctx.fillRect(10, 10, 100, 100);
+/script>
+
 </body>
 </html>
