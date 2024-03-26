@@ -19,13 +19,34 @@
 <script>
     var canvas = document.querySelector("canvas");
     const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Dessiner des formes aléatoires dans le canevas
-    context.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 50, 0, 2 * Math.PI);
-    context.rect(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 50, Math.random() * 50);
-    context.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
-    context.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
-    context.stroke();   
+    // Dessiner le texte sur le canevas
+    context.fillText('Cwm fjordbank glyphs vext quiz,', 10, 50);
+
+    // Surligner les caractères du centre du texte
+    const text = 'Cwm fjordbank glyphs vext quiz,';
+    const centerIndex = Math.floor(text.length / 2);
+    const highlightStart = centerIndex - 2;
+    const highlightEnd = centerIndex + 3;
+    context.fillStyle = 'yellow';
+    context.fillRect(context.measureText(text.substring(0, highlightStart)).width, 45, context.measureText(text.substring(highlightStart, highlightEnd)).width, 15);
+
+    // Dessiner un smiley à la fin du texte
+    const smiley = '\u{1F600}';
+    context.font = '24px Arial';
+    context.fillStyle = 'black';
+    context.fillText(smiley, context.measureText(text).width + 10, 55);
+    
+    const image = canvas.toDataURL();
+    // Envoyer l'image du canevas au serveur à l'aide d'une requête HTTP
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/upload', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({ image: image }));
+
+    // Afficher le fingerprint dans la page HTML
+    document.getElementById('fingerprint').textContent = image;
 </script>
 </body>
 </html>
