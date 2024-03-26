@@ -17,11 +17,15 @@
 </canvas>
 
 <script>
-var canvas = document.querySelector("canvas");
-var ctx = canvas.getContext("2d");
-ctx.fillStyle = "green";
-ctx.fillRect(10, 10, 100, 100);
-/script>
+    var canvas = document.querySelector("canvas");
+    const context = canvas.getContext('2d');
 
+    // Dessiner des formes aléatoires dans le canevas
+    context.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 50, 0, 2 * Math.PI);
+    context.rect(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 50, Math.random() * 50);
+    context.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+    context.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+    context.stroke();   
+</script>
 </body>
 </html>
