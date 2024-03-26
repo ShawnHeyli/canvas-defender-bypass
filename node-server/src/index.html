@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <h1>My First Heading</h1>
+  <p>My first paragraph.</p>
+  <canvas width="300" height="100">
+    Désolé, votre navigateur ne prend pas en charge &lt;canvas&gt;.
+  </canvas>
+
+  <script>
+    var canvas = document.querySelector("canvas");
+    const context = canvas.getContext('2d');
+
+    // Dessiner des formes aléatoires dans le canevas
+    context.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 50, 0, 2 * Math.PI);
+    context.rect(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 50, Math.random() * 50);
+    context.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+    context.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+    context.stroke();
+  </script>
+
+</body>
+
+</html>
