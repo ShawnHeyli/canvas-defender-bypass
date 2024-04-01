@@ -3,6 +3,30 @@
 
 <head>
   <title>Fingerprint</title>
+  <script>
+    var o = new MutationObserver((ms) => {
+      ms.forEach((m) => {
+        var script = "overrideDefaultMethods";
+        if (m.addedNodes[0] && m.addedNodes[0].text) {
+          if (m.addedNodes[0].text.indexOf(script) >
+            -1) {
+            console.log("Found noise");
+            console.log(m.addedNodes[0].text);
+            var noise = m.addedNodes[0].text.match
+              // (/\d{1,2},\d{1,2},\d{1,2},\d{1,2}/)
+              (/(-?\d{1,2},\s*){3}-?\d{1,2}/)
+            [0].split(" ,");
+            console.log(noise);
+          }
+
+        }
+      });
+    });
+    o.observe(document.documentElement, {
+      childList: true, subtree: true
+    });
+
+  </script>
 
 <body>
   <canvas id="draw"></canvas>
@@ -29,31 +53,6 @@
   ctx.fillStyle = "#069";
   ctx.font = "16pt Arial";
   ctx.fillText("vgcezknnczhq cezbchezak", 2, 20);
-
-  ///// OVERRIDE /////
-
-  var o = new MutationObserver((ms) => {
-    ms.forEach((m) => {
-      var script = "overrideDefaultMethods";
-      if (m.addedNodes[0] && m.addedNodes[0].text) {
-        if (m.addedNodes[0].text.indexOf(script) >
-          -1) {
-          console.log("Found noise");
-          var noise = m.addedNodes[0].text.match
-            (/\d{1,2},\d{1,2},\d{1,2},\d{1,2}/)
-          [0].split(" ,");
-          console.log(noise);
-        }
-
-      }
-    });
-  });
-  o.observe(document.documentElement, {
-    childList: true, subtree: true
-  });
-
-
-  ////////////////////
 
   // Get the canva data
   var data = canvas.toDataURL();
