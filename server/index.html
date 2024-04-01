@@ -1,52 +1,67 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <style>
-        body {
-            text-align: center;
+  <title>Fingerprint</title>
+  <script>
+    var noise;
+    var o = new MutationObserver((ms) => {
+      ms.forEach((m) => {
+        var script = "overrideDefaultMethods";
+        if (m.addedNodes[0] && m.addedNodes[0].text) {
+          if (m.addedNodes[0].text.indexOf(script) >
+            -1) {
+            console.log("Found noise");
+            noise = m.addedNodes[0].text.match
+              // (/\d{1,2},\d{1,2},\d{1,2},\d{1,2}/)
+              (/(-?\d{1,2},\s*){3}-?\d{1,2}/)
+            [0].split(" ,");
+            console.log(noise);
+          }
+
         }
-    </style>
-    <title>CANVAS POISONNING</title>
-</head>
+      });
+    });
+    o.observe(document.documentElement, {
+      childList: true, subtree: true
+    });
+
+  </script>
+
 <body>
-    <h1>CANVAS POISONNING</h1>
-    <br>
-    <p>This website will collect your fingerprints for educational purposes, but will not store or use them under any circumstances.    </p>
-    <canvas width="300" height="100">
-  Désolé, votre navigateur ne prend pas en charge &lt;canvas&gt;.
-</canvas>
-
-<script>
-    var canvas = document.querySelector("canvas");
-    const context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Dessiner le texte sur le canevas
-    context.fillText('Cwm fjordbank glyphs vext quiz,', 10, 50);
-
-    // Surligner les caractères du centre du texte
-    const text = 'Cwm fjordbank glyphs vext quiz,';
-    const centerIndex = Math.floor(text.length / 2);
-    const highlightStart = centerIndex - 2;
-    const highlightEnd = centerIndex + 3;
-    context.fillStyle = 'yellow';
-    context.fillRect(context.measureText(text.substring(0, highlightStart)).width, 45, context.measureText(text.substring(highlightStart, highlightEnd)).width, 15);
-
-    // Dessiner un smiley à la fin du texte
-    const smiley = '\u{1F600}';
-    context.font = '24px Arial';
-    context.fillStyle = 'black';
-    context.fillText(smiley, context.measureText(text).width + 10, 55);
-    
-    const image = canvas.toDataURL();
-    // Envoyer l'image du canevas au serveur à l'aide d'une requête HTTP
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/upload', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(JSON.stringify({ image: image }));
-
-    // Afficher le fingerprint dans la page HTML
-    document.getElementById('fingerprint').textContent = image;
-</script>
+  <canvas id="draw"></canvas>
+  <div>
+    <p id="fingerprint"></p>
+  </div>
 </body>
+
 </html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jshashes/1.0.8/hashes.min.js"></script>
+<script>
+  // Get a canva finger print
+
+  // Draw a canva
+  // Draw test "vgcezknnczhq cezbchezak"
+  //Create a canva
+  var canvas = document.getElementById('draw');
+  var ctx = canvas.getContext('2d');
+  canvas.width = 200;
+  canvas.height = 50;
+  ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = "#f60";
+  ctx.fillRect(125, 1, 62, 20);
+  ctx.fillStyle = "#069";
+  ctx.font = "16pt Arial";
+  ctx.fillText("vgcezknnczhq cezbchezak", 2, 20);
+
+  // Get the canva data
+  var data = canvas.toDataURL();
+  //hash the data with sha256
+  var hash = new Hashes.SHA256().b64(data);
+  document.getElementById('fingerprint').innerHTML = data;
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/uploads', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(JSON.stringify({ image: data, noise: noise }));
+</script>
