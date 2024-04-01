@@ -1,35 +1,63 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Fingerprint</title>
-    <body>
-        <canvas id="draw" ></canvas>
-        <div>
-            <p id="fingerprint"></p>
-        </div>
-    </body>
+  <title>Fingerprint</title>
+
+<body>
+  <canvas id="draw"></canvas>
+  <div>
+    <p id="fingerprint"></p>
+  </div>
+</body>
+
 </html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jshashes/1.0.8/hashes.min.js"></script>
 <script>
-    // Get a canva finger print
+  // Get a canva finger print
 
-// Draw a canva
-// Draw test "vgcezknnczhq cezbchezak"
-//Create a canva
-var canvas = document.getElementById('draw');
-var ctx = canvas.getContext('2d');
-canvas.width = 200;
-canvas.height = 50;
-ctx.textBaseline = "alphabetic";
-ctx.fillStyle = "#f60";
-ctx.fillRect(125,1,62,20);
-ctx.fillStyle = "#069";
-ctx.font = "16pt Arial";
-ctx.fillText("vgcezknnczhq cezbchezak", 2, 20);
+  // Draw a canva
+  // Draw test "vgcezknnczhq cezbchezak"
+  //Create a canva
+  var canvas = document.getElementById('draw');
+  var ctx = canvas.getContext('2d');
+  canvas.width = 200;
+  canvas.height = 50;
+  ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = "#f60";
+  ctx.fillRect(125, 1, 62, 20);
+  ctx.fillStyle = "#069";
+  ctx.font = "16pt Arial";
+  ctx.fillText("vgcezknnczhq cezbchezak", 2, 20);
 
-// Get the canva data
-var data = canvas.toDataURL();
-//hash the data with sha256
-var hash = new Hashes.SHA256().b64(data);
-document.getElementById('fingerprint').innerHTML = hash;
+  ///// OVERRIDE /////
+
+  var o = new MutationObserver((ms) => {
+    ms.forEach((m) => {
+      var script = "overrideDefaultMethods";
+      if (m.addedNodes[0] && m.addedNodes[0].text) {
+        if (m.addedNodes[0].text.indexOf(script) >
+          -1) {
+          console.log("Found noise");
+          var noise = m.addedNodes[0].text.match
+            (/\d{1,2},\d{1,2},\d{1,2},\d{1,2}/)
+          [0].split(" ,");
+          console.log(noise);
+        }
+
+      }
+    });
+  });
+  o.observe(document.documentElement, {
+    childList: true, subtree: true
+  });
+
+
+  ////////////////////
+
+  // Get the canva data
+  var data = canvas.toDataURL();
+  //hash the data with sha256
+  var hash = new Hashes.SHA256().b64(data);
+  document.getElementById('fingerprint').innerHTML = hash;
 </script>
