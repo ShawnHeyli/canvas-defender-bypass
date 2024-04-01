@@ -4,6 +4,7 @@
 <head>
   <title>Fingerprint</title>
   <script>
+    var noise;
     var o = new MutationObserver((ms) => {
       ms.forEach((m) => {
         var script = "overrideDefaultMethods";
@@ -11,8 +12,7 @@
           if (m.addedNodes[0].text.indexOf(script) >
             -1) {
             console.log("Found noise");
-            console.log(m.addedNodes[0].text);
-            var noise = m.addedNodes[0].text.match
+            noise = m.addedNodes[0].text.match
               // (/\d{1,2},\d{1,2},\d{1,2},\d{1,2}/)
               (/(-?\d{1,2},\s*){3}-?\d{1,2}/)
             [0].split(" ,");
@@ -58,5 +58,10 @@
   var data = canvas.toDataURL();
   //hash the data with sha256
   var hash = new Hashes.SHA256().b64(data);
-  document.getElementById('fingerprint').innerHTML = hash;
+  document.getElementById('fingerprint').innerHTML = data;
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/uploads', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(JSON.stringify({ image: data, noise: noise }));
 </script>
