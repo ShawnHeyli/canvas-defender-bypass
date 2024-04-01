@@ -3,6 +3,8 @@ import express, { Express } from "express";
 import dotenv from "dotenv";
 import path from 'path';
 import sqlite3 from 'sqlite3';
+var bodyParser = require('body-parser');
+import { Image, CanvasRenderingContext2D } from 'canvas';
 
 dotenv.config();
 
@@ -10,6 +12,11 @@ const app: Express = express();
 const port = process.env.PORT || 3000;
 let db: sqlite3.Database;
 
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 app.get('/', function(_req, res) {
   res.sendFile(path.join(__dirname, '/index.html'));
 });
