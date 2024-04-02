@@ -9,6 +9,25 @@ import base64
 import mimetypes
 from PIL import Image
 
+def save_pixels(img:Image, filename:str):
+    # Open the file where the pixels will be save
+    fic = open(filename, "w")
+    pix = img.load()
+    # Parse the PIL object pixel by pixel
+    for i in range(img.size[0]):
+        for j in range(img.size[1]):
+            fic.write(str(pix[i, j]))
+        fic.write('\n')
+    fic.close()
+
+def base64_to_pixels(base64_string: str, filename: str):
+    try:
+        img = Image.open(BytesIO(base64.b64decode(base64_string)))
+    except binascii.Error as e:
+        print("Error decoding base64: ", e)
+        return None
+    save_pixels(img, filename)
+
 def fingerprint_from_noised(noised: str, r: int, g: int, b: int, a: int):
     #Delete html tag from noised base64 image (data:image/png;base64)
     noised = noised.split(',')[1]
