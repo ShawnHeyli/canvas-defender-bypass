@@ -29,7 +29,6 @@
   </script>
 
 <body>
-  <canvas id="draw"></canvas>
   <div>
     <p id="fingerprint"></p>
   </div>
@@ -38,30 +37,43 @@
 </html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jshashes/1.0.8/hashes.min.js"></script>
 <script>
-  // Get a canva finger print
+  function create_canvas(id, text) {
+    canvas2 = document.createElement("canvas");
+    canvas2.id = id;
+    document.body.appendChild(canvas2);
 
-  // Draw a canva
-  // Draw test "vgcezknnczhq cezbchezak"
-  //Create a canva
-  var canvas = document.getElementById('draw');
-  var ctx = canvas.getContext('2d');
-  canvas.width = 200;
-  canvas.height = 50;
-  ctx.textBaseline = "alphabetic";
-  ctx.fillStyle = "#f60";
-  ctx.fillRect(125, 1, 62, 20);
-  ctx.fillStyle = "#069";
-  ctx.font = "16pt Arial";
-  ctx.fillText("vgcezknnczhq cezbchezak", 2, 20);
+    var ctx = canvas2.getContext('2d');
+    canvas2.width = 200;
+    canvas2.height = 50;
+    ctx.fillStyle = "#f60";
+    ctx.fillRect(125, 1, 62, 20);
+    ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = "#069";
+    ctx.font = "16pt Arial";
+    ctx.fillText(text, 2, 20);
+  }
 
-  // Get the canva data
-  var data = canvas.toDataURL();
-  //hash the data with sha256
-  var hash = new Hashes.SHA256().b64(data);
-  document.getElementById('fingerprint').innerHTML = data;
+  function restoreDefaultMethods() {
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
 
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', '/uploads', true);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.send(JSON.stringify({ image: data, noise: noise }));
+    const originalToDataURL = iframe.contentWindow.HTMLCanvasElement.prototype.toDataURL;
+    const originalToBlob = iframe.contentWindow.HTMLCanvasElement.prototype.toBlob;
+
+    document.body.removeChild(iframe);
+
+    HTMLCanvasElement.prototype.toDataURL = originalToDataURL;
+    HTMLCanvasElement.prototype.toBlob = originalToBlob;
+  }
+
+  setTimeout(() => {
+    create_canvas("wo_mitig", "sans mitigation");
+    console.log(document.getElementById("wo_mitig").toDataURL());
+
+    restoreDefaultMethods();
+
+    create_canvas("w_mitig", "avec mitigation");
+    console.log(document.getElementById("w_mitig").toDataURL());
+  }, 1000);
 </script>
