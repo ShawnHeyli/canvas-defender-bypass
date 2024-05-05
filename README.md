@@ -1,6 +1,7 @@
 To run the server and check the canvas:
 
 cd server
+
 python3 server_fp.py
 
 
