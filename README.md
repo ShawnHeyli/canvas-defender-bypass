@@ -1,3 +1,9 @@
+# Canvas defender bypass
+
+You can read our report [here](./report.pdf)
+
+## Usage 
+
 To run the server and check the canvas:
 
 cd server
